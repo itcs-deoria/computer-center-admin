@@ -1,0 +1,58 @@
+<h2>Edit Payment for <%= student.name %></h2>
+<p><strong>Receipt No:</strong> <%= payment.receiptNo %></p>
+
+<form
+  id="editForm"
+  action="/fees/<%= student._id %>/edit/<%= payment.receiptNo %>"
+  method="POST"
+  onsubmit="return confirmEdit();"
+>
+  <label>Amount (₹):</label>
+  <input type="number" name="amount" value="<%= payment.amount %>" required><br><br>
+
+  <label>Payment Date:</label>
+  <input type="date" name="paymentDate"
+         value="<%= new Date(payment.paymentDate).toISOString().substring(0,10) %>" required><br><br>
+
+  <label>Collected By:</label>
+  <input type="text" name="collectedBy" value="<%= payment.collectedBy %>" required><br><br>
+
+  <label>Payment Mode:</label>
+  <select name="paymentMode" required>
+    <option value="Cash" <%= payment.paymentMode==='Cash'?'selected':'' %>>Cash</option>
+    <option value="UPI" <%= payment.paymentMode==='UPI'?'selected':'' %>>UPI</option>
+    <option value="Card" <%= payment.paymentMode==='Card'?'selected':'' %>>Card</option>
+    <option value="Bank Transfer" <%= payment.paymentMode==='Bank Transfer'?'selected':'' %>>Bank Transfer</option>
+    <option value="Cheque" <%= payment.paymentMode==='Cheque'?'selected':'' %>>Cheque</option>
+  </select><br><br>
+
+  <label>Notes:</label>
+  <input type="text" name="notes" value="<%= payment.notes %>"><br><br>
+
+  <button type="submit" class="update-btn">Update Payment</button>
+</form>
+
+<a href="/fees/<%= student._id %>">⬅ Back to Fee History</a>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+document.getElementById('editForm').addEventListener('submit', function (e) {
+  e.preventDefault();
+  Swal.fire({
+    title: 'Confirm Update',
+    text: 'Are you sure you want to update this payment record?',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#3085d6',
+    cancelButtonColor: '#d33',
+    confirmButtonText: 'Yes, Update it'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      this.submit();
+    }
+  });
+});
+</script>
+
+
+

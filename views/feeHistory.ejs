@@ -1,0 +1,84 @@
+<h2>Fee History for <%= student.name %></h2>
+<p>Student ID: <%= student.studentId %></p>
+<p>Total Fees: ₹<%= student.totalFees %></p>
+<p>Paid Fees: ₹<%= student.paidFees %></p>
+<p>Balance: ₹<%= student.totalFees - student.paidFees %></p>
+
+
+<hr>
+<h3>Payment History</h3>
+<table border="1">
+  <tr>
+    <th>Receipt No</th>
+    <th>Date</th>
+    <th>Amount</th>
+    <th>Mode</th>
+    <th>Collected By</th>
+    <th>Notes</th>
+  </tr>
+  <% student.payments.forEach(p => { %>
+<tr>
+  <td><%= p.receiptNo %></td>
+  <td><%= formatDate(p.paymentDate) %></td>
+  <td>₹<%= p.amount %></td>
+  <td><%= p.paymentMode %></td>
+  <td><%= p.collectedBy %></td>
+  <td><%= p.notes || '-' %></td>
+  <!-- <td><a href="/fees/<%= student._id %>/edit/<%= encodeURIComponent(p.receiptNo) %>">✏ Edit</a> -->
+  <td>
+  <a href="/fees/<%= student._id %>/edit/<%= p.receiptNo %>">✏ Edit</a> |
+  <form action="/fees/<%= student._id %>/delete/<%= p.receiptNo %>" method="POST" style="display:inline;" onsubmit="return confirmDelete();">
+    <button type="submit" style="color:red; background:none; border:none; cursor:pointer;">🗑 Delete</button>
+  </form>
+</td>
+
+</td>
+</tr>
+
+  <% }) %>
+</table>
+
+<hr>
+<h3>Add Payment</h3>
+<form action="/fees/<%= student._id %>/add" method="POST">
+  <input type="text" name="receiptNo" placeholder="Receipt No (e.g. RC001)">
+  <input type="number" name="amount" placeholder="Amount (₹)" required>
+  <input type="date" name="paymentDate" required>
+  <input type="text" name="collectedBy" placeholder="Collected By" required>
+  <select name="paymentMode" required>
+    <option value="">Select Mode</option>
+    <option value="Cash">Cash</option>
+    <option value="UPI">UPI</option>
+    <option value="Card">Card</option>
+    <option value="Bank Transfer">Bank Transfer</option>
+    <option value="Cheque">Cheque</option>
+  </select>
+  <input type="text" name="notes" placeholder="Notes / Remarks (optional)">
+  <button type="submit">Add Payment</button>
+</form>
+
+<a href="/students">⬅ Back to Students</a>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+function confirmDelete() {
+  event.preventDefault(); // stop form for now
+  const form = event.target;
+
+  Swal.fire({
+    title: 'Delete Payment?',
+    text: "This action cannot be undone!",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      form.submit();
+    }
+  });
+
+  return false;
+}
+</script>
+

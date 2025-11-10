@@ -1,0 +1,41 @@
+<h2>Welcome, <%= student.name %></h2>
+<p><strong>Student ID:</strong> <%= student.studentId %></p>
+<p><strong>Registration Date:</strong> <%= formatDate(student.registrationDate) %></p>
+<p><strong>Course:</strong> <%= student.course ? student.course.name : '-' %></p>
+<p><strong>Batch Time:</strong> <%= student.batchTime %></p>
+<p><strong>Total Fees:</strong> ₹<%= student.totalFees %></p>
+<p><strong>Paid Fees:</strong> ₹<span style="color:green; font-weight: bolder;"><%= student.paidFees %></span></p>
+<p><strong>Balance:</strong> ₹<span style="color:red; font-weight: bolder;"><%= student.totalFees - student.paidFees %></span></p>
+
+
+<hr>
+
+<h3>💳 Payment History</h3>
+<table border="1" cellspacing="0" cellpadding="6">
+  <tr style="background:#f2f2f2;">
+    <th>Receipt No</th>
+    <th>Date</th>
+    <th>Amount (₹)</th>
+    <th>Mode</th>
+    <th>Collected By</th>
+    <th>Notes</th>
+  </tr>
+  <% if (student.payments && student.payments.length > 0) { %>
+    <% student.payments.forEach(p => { %>
+      <tr>
+        <td><%= p.receiptNo %></td>
+        <td><%= formatDate(p.paymentDate) %></td>
+        <td>₹ <%= p.amount %></td>
+        <td><%= p.paymentMode %></td>
+        <td><%= p.collectedBy %></td>
+        <td><%= p.notes || '-' %></td>
+      </tr>
+    <% }) %>
+  <% } else { %>
+    <tr><td colspan="6" align="center">No payments recorded yet</td></tr>
+  <% } %>
+</table>
+
+<hr>
+
+<a href="/student/logout">Logout</a>

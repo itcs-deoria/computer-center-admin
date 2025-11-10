@@ -1,0 +1,18 @@
+<h2>Courses</h2>
+<form action="/courses/add" method="POST">
+  <input type="text" name="name" placeholder="Course Name" required>
+  <input type="text" name="duration" placeholder="Duration (e.g. 3 Months)" required>
+  <input type="number" name="fee" placeholder="Fee" required>
+  <button type="submit">Add Course</button>
+</form>
+
+<table border="1">
+  <tr><th>Name</th><th>Duration</th><th>Fee</th></tr>
+  <% courses.forEach(c => { %>
+    <tr>
+      <td><%= c.name %></td>
+      <td><%= c.duration %></td>
+      <td>₹<%= c.fee %></td>
+    </tr>
+  <% }) %>
+</table>
